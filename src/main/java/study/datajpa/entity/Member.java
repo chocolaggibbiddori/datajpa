@@ -14,6 +14,10 @@ import static lombok.AccessLevel.PROTECTED;
 @Setter
 @NoArgsConstructor(access = PROTECTED)
 @ToString(of = {"id", "username", "age"})
+@NamedQuery(
+        name = "Member.findByUsername",
+        query = "SELECT m FROM Member m WHERE m.username = :username"
+)
 @Entity
 public class Member {
 
