@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
+import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
+import study.datajpa.entity.Team;
 
 import java.util.List;
 
@@ -18,6 +20,8 @@ class MemberRepositoryTest {
 
     @Autowired
     MemberRepository memberRepository;
+    @Autowired
+    TeamRepository teamRepository;
 
     @Test
     void testMember() {
@@ -97,5 +101,55 @@ class MemberRepositoryTest {
 
         //t
         assertThat(result.get(0)).isEqualTo(m1);
+    }
+
+    @Test
+    void testQuery() {
+        //g
+        Member m1 = new Member("memberA", 10);
+        Member m2 = new Member("memberA", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        //w
+        List<Member> result = memberRepository.findUser("memberA", 20);
+
+        //t
+        assertThat(result.get(0)).isEqualTo(m2);
+    }
+
+    @Test
+    void findUsernameList() {
+        //g
+        Member m1 = new Member("memberA", 10);
+        Member m2 = new Member("memberB", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        //w
+        List<String> result = memberRepository.findUsernameList();
+
+        //t
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
+
+    @Test
+    void findMemberDto() {
+        //g
+        Team team = new Team("teamA");
+        teamRepository.save(team);
+
+        Member m1 = new Member("memberA", 10, team);
+        memberRepository.save(m1);
+
+        //w
+        List<MemberDto> usernameList = memberRepository.findMemberDto();
+
+        //t
+        for (MemberDto memberDto : usernameList) {
+            System.out.println("memberDto = " + memberDto);
+        }
     }
 }
