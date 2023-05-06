@@ -18,6 +18,10 @@ import static lombok.AccessLevel.PROTECTED;
         name = "Member.findByUsername",
         query = "SELECT m FROM Member m WHERE m.username = :username"
 )
+@NamedEntityGraph(
+        name = "Member.all",
+        attributeNodes = @NamedAttributeNode("team")
+)
 @Entity
 public class Member {
 
