@@ -23,7 +23,7 @@ import static lombok.AccessLevel.PROTECTED;
         attributeNodes = @NamedAttributeNode("team")
 )
 @Entity
-public class Member extends JpaBaseEntity {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue
