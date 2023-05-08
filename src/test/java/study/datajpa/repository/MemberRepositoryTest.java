@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.dto.MemberDto;
@@ -292,5 +293,27 @@ class MemberRepositoryTest {
     @Test
     void callCustom() {
         List<Member> result = memberRepository.findMemberCustom();
+    }
+
+    @Test
+    void specBasic() {
+        //g
+        Team team = new Team("teamA");
+        teamRepository.save(team);
+
+        Member m1 = new Member("m1", 10, team);
+        Member m2 = new Member("m2", 20, team);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        em.flush();
+        em.clear();
+
+        //w
+        Specification<Member> spec = MemberSpec.username("m1").and(MemberSpec.teamName("teamA"));
+        List<Member> result = memberRepository.findAll(spec);
+
+        //t
+        assertThat(result.size()).isEqualTo(1);
     }
 }
